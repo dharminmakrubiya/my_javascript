@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Javascript CRUD Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+    <style>
+        .btn_button {
+            text-align: right;
+            margin-right: 1em;
+        }
+
+        td {
+
+            text-align: left;
+            margin-left: 1em; 
+        }
+
+        #div-id {
+            display: none;
+        }
+
+        .edit_button {
+            margin-left: 4px;
+            text-align: right;
+        }
+
+        .delete-button {
+            margin: 10px;
+            text-align: left;
+        }
+
+        .form_display {
+            margin-bottom: 35px;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div>
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div>
+                    <div>
+                        <div class="card-body p-4" id="first_div">
+                                <small>My CRUD JavaScript Application using Handlebars</small>
+                            <form action="javascript:void(0);" method="POST" onsubmit="app.Add()">
+                                <div>
+                                    <div>
+                                        <input type="text" id="add-name" placeholder="Enter Name">
+                                        <!-- <input type="submit" class="btn btn-success" value="Add"> -->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="div-id">
+                            <form action="javascript:void(0);" method="POST" id="saveEdit">
+                                <div>
+                                    <!-- <input type="text" id="edit-name" class="form-control"> -->
+                                    <input type="submit" value="Edit" />
+                                    <input type="submit" value="Cancel" />
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <p id="count_name"></p>
+
+                        <table>
+                            <tr>
+
+                            </tr>
+                            <tbody id="Records">
+
+                            </tbody>
+                        </table>
+
+
+                        <script>
+                            var app = new function () {
+
+                                this.el = document.getElementById('Records');
+
+                                this.Records = ['Dharmin Makrubiya'];
+
+                                this.Count = function (data) {
+                                    var el = document.getElementById('count_name');
+                                    var name = 'username';
+
+                                    if (data) {
+                                        if (data > 1) {
+                                            name = 'Records';
+                                        }
+
+                                    } else {
+
+                                    }
+                                };
+
+                                this.FetchAll = function () {
+                                    var data = '';
+
+                                    if (this.Records.length > 0) {
+                                        for (i = 0; i < this.Records.length; i++) {
+                                            data += '<tr>';
+                                            data += '<td><input type="checkbox"  id="myCheck" onclick="myFunction()">';
+                                            data += '<td>' + this.Records[i] + '</td>';
+                                            data += '<td class="btn_button"><button " onclick="app.Edit(' + i + ')">Edit</button>';
+                                            data += '<button delete-button" onclick="app.Delete(' + i + ')">Delete</button></td>';
+                                            data += '</tr>';
+                                        }
+                                    }
+
+                                    this.Count(this.Records.length);
+                                    return this.el.innerHTML = data;
+
+
+
+                                };
+
+                                this.Add = function () {
+                                    el = document.getElementById('add-name');
+
+                                    var username = el.value;
+
+                                    if (username) {
+
+                                        this.Records.push(username.trim());
+
+                                        el.value = '';
+
+                                        this.FetchAll();
+                                    }
+                                };
+
+                                this.Edit = function (item) {
+
+                                    var el = document.getElementById('add-name');
+
+                                    el.value = this.Records[item];
+
+                                    document.getElementById('div-id').style.display = 'block';
+                                    self = this;
+
+                                    document.getElementById('saveEdit').onsubmit = function () {
+
+                                        var username = el.value;
+
+                                        if (username) {
+
+                                            self.Records.splice(item, 1, username.trim());
+
+                                            self.FetchAll();
+
+                                            alert('Your Item Successfully Updated!');
+
+                                            CloseInput();
+                                        }
+                                    }
+                                };
+
+                                this.Delete = function (item) {
+
+                                    this.Records.splice(item, 1);
+
+                                    alert("Are you sure to delete this item?");
+
+                                    this.FetchAll();
+                                };
+
+                            }
+                            function myFunction() {
+                                var checkBox = document.getElementById("myCheck");
+                                var text = document.getElementById("text");
+                                if (checkBox.checked == true) {
+                                    //alert('Your Item Complete Successfully.');
+                                    document.getElementById("Records").style.textDecoration = "line-through";
+                                } else {
+                                    document.getElementById("Records").style.textDecoration = "none";
+                                }
+                            }
+                            app.FetchAll();
+                            myFunction();
+                            function CloseInput() {
+                                document.getElementById('div-id').style.display = 'none';
+                            }
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

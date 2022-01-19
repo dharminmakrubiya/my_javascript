@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert handlebars</title>
+</head>
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+    <script id="details-template" type="text/x-handlebars-template">
+        <p>My name is {{nameValue}}.</p>
+    </script>
+    <div id='mainDiv'>
+        <div id='formDiv'>
+            <form id='demoForm'>
+                <fieldset>
+                    <legend>Insert Record</legend>
+                    <table id='regDetails'>
+                        <tr>
+                            <td><label for='nameInput'>Name</label></td>
+                            <td><input type='text' id='nameInput' /></td>
+                        </tr>
+                        <td colspan='2'><input type='submit' value="Add" id='submitButton' /></td>
+                        </tr>
+                    </table>
+
+                    <form class="form-outline" action="javascript:void(0);" method="POST" id="submitButton">
+                        <table>
+                            <tr>
+                                <td><input type="submit" value="Edit" id="nameInput"/></td>
+                                <td><input type="submit" value="Cancel" /></td>
+                            </tr>
+                        </table>
+                    </form>
+                </fieldset>
+            </form>
+        </div>
+
+        <div id='details'></div>
+    </div>
+
+
+    <script>
+
+        $(document).ready(function () {
+            var templateSource = $("#details-template").html();
+            var template = Handlebars.compile(templateSource);
+            $('#submitButton').click(function () {
+                $("#details").html(template({ "nameValue": $('#nameInput').val() }));
+            });
+        });
+
+
+
+        //Add
+        $(document).add(function () {
+           var el = $('#nameInput').html();
+
+            var username = el.value;
+
+            if (username) {
+
+                this.Records.push(username.trim());
+
+                el.value = '';
+
+                this.FetchAll();
+            }
+        });
+
+
+        //edit
+        $(document).edit(function () {
+            var el = document.getElementById('nameInput');
+
+            el.value = this.Records[item];
+
+            document.getElementById('regDetails').style.display = 'block';
+            self = this;
+
+            document.getElementById('submitButton').onsubmit = function () {
+
+                var username = el.value;
+
+                if (username) {
+
+                    self.Records.splice(item, 1, username.trim());
+
+                    self.FetchAll();
+
+                    alert('Your Item Successfully Updated!');
+
+                    CloseInput();
+                }
+            }
+        });
+
+
+        //Delete 
+        $(document).delete(function () {
+            this.Records.splice(item, 1);
+
+            alert("Are you sure to delete this item?");
+
+            this.FetchAll();
+        });
+
+        //closeinput
+        $(document).CloseInput(function () {
+            document.getElementById('regDetails').style.display = 'none';
+        });
+
+    </script>
+</body>
+
+</html>
